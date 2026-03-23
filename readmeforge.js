@@ -7,9 +7,10 @@
 
   const inputs = document.querySelectorAll(".textInput");
   const counts = document.querySelectorAll(".wordCount");
+  const wordCountText = document.querySelectorAll(".wordCountText");
 
   inputs.forEach((input, index) => {
-    enableWordCount(input, counts[index]);
+    enableWordCount(input, counts[index], wordCountText[index]);
   });
 
   // ── Section definitions ───────────────────────────────────────
@@ -1206,7 +1207,7 @@
     if (el) el.value = val;
   }
 
-  function enableWordCount(inputEl, countEl) {
+  function enableWordCount(inputEl, countEl, wordCountText) {
     inputEl.addEventListener("input", () => {
       const text = inputEl.value.trim();
 
@@ -1216,6 +1217,11 @@
       words = words.filter(word => word !== "###" && word !== "-");
 
       countEl.textContent = words.length;
+      if (words.length === 1) {
+        wordCountText.textContent = "Word";
+      } else {
+        wordCountText.textContent = "Words";
+      }
     });
   }
 
