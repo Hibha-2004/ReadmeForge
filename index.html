@@ -86,6 +86,7 @@
               font-family: &quot;JetBrains Mono&quot;, monospace;
             ">
           active</span>
+        <span id="autoSaveStatus" class="autosave-status">✓ Auto-saved</span>
       </div>
       <div class="header-right">
         <!-- Source Code Link in App Header -->
@@ -102,6 +103,7 @@
           </svg>
           Source
         </a>
+        <button class="hbtn" onclick="clearSavedData()">🗑 Clear Saved</button>
         <button class="hbtn" onclick="resetAll()">↺ Reset</button>
         <button class="hbtn" onclick="copyMarkdown()">Copy MD</button>
         <button class="hbtn primary" id="modalPrintBtn" onclick="downloadPDF()">
@@ -265,28 +267,21 @@
               </div>
               <div>
                 <label>INSTALL COMMANDS (one per line)</label>
-                <textarea id="installCmds" style="min-height: 100px" oninput="scheduleRender()"
+                <textarea class="textInput" id="installCmds" style="min-height: 100px" oninput="scheduleRender()"
                   placeholder="git clone https://github.com/user/repo.git&#10;cd repo&#10;pip install -r requirements.txt&#10;python manage.py migrate&#10;python manage.py runserver"></textarea>
+                <label><span class="wordCount">0</span> <span class="wordCountText">Words</span></label>
               </div>
               <div>
                 <label>ENV VARIABLES (optional)</label>
-                <textarea id="envVars" style="min-height: 70px" oninput="scheduleRender()"
-                  placeholder="SECRET_KEY=your_secret&#10;DATABASE_URL=sqlite:///db.sqlite3&#10;DEBUG=True"></textarea>
+                <textarea class="textInput" id="envVars" style="min-height: 70px" oninput="scheduleRender()"
+placeholder="SECRET_KEY=your_secret&#10;DATABASE_URL=sqlite:///db.sqlite3&#10;DEBUG=True"></textarea>
+                <label><span class="wordCount">0</span> <span class="wordCountText">Words</span></label>
               </div>
-            </div>
-          </div>
-
-          <!-- 6. Usage -->
-          <div class="editor-section" id="sec-usage">
-            <div class="es-header">
-              <div class="es-num">6</div>
-              <div class="es-title">Usage</div>
-            </div>
-            <div class="es-body">
               <div>
                 <label>RUN COMMAND / USAGE INSTRUCTIONS</label>
-                <textarea id="usageCmd" style="min-height: 80px" oninput="scheduleRender()"
+                <textarea class="textInput" id="usageCmd" style="min-height: 80px" oninput="scheduleRender()"
                   placeholder="python manage.py runserver&#10;&#10;# Then open http://127.0.0.1:8000/"></textarea>
+                <label><span class="wordCount">0</span> <span class="wordCountText">Words</span></label>
               </div>
             </div>
           </div>
@@ -300,8 +295,9 @@
             <div class="es-body">
               <div>
                 <label>PASTE YOUR FOLDER STRUCTURE (indented with spaces)</label>
-                <textarea id="rawStructure" style="min-height: 120px" oninput="updateStructurePreview()"
+                <textarea class="textInput" id="rawStructure" style="min-height: 120px" oninput="updateStructurePreview()"
                   placeholder="src/&#10;  api/&#10;  models/&#10;  utils/&#10;templates/&#10;static/&#10;main.py&#10;requirements.txt&#10;README.md"></textarea>
+                <label><span class="wordCount">0</span> <span class="wordCountText">Words</span></label>
               </div>
               <div>
                 <label>VISUAL PREVIEW</label>
@@ -337,8 +333,9 @@
               <div>
                 <label>OR ADD IMAGE URLS (format: Label | URL, one per
                   line)</label>
-                <textarea id="imageUrls" style="min-height: 60px" oninput="scheduleRender()"
+                <textarea class="textInput" id="imageUrls" style="min-height: 60px" oninput="scheduleRender()"
                   placeholder="Landing Page | https://i.imgur.com/abc.png&#10;Dashboard | https://i.imgur.com/xyz.png"></textarea>
+                <label><span class="wordCount">0</span> <span class="wordCountText">Words</span></label>
               </div>
             </div>
           </div>
@@ -353,8 +350,9 @@
               <div>
                 <label>API ENDPOINTS — format: METHOD /path | Description (one per
                   line)</label>
-                <textarea id="apiDocs" style="min-height: 100px" oninput="scheduleRender()"
+                <textarea class="textInput" id="apiDocs" style="min-height: 100px" oninput="scheduleRender()"
                   placeholder="GET /api/users | Get all users&#10;POST /api/users | Create a new user&#10;GET /api/users/:id | Get user by ID&#10;PUT /api/users/:id | Update user&#10;DELETE /api/users/:id | Delete user"></textarea>
+                <label><span class="wordCount">0</span> <span class="wordCountText">Words</span></label>
               </div>
               <div>
                 <label>API BASE URL (optional)</label>
@@ -373,8 +371,9 @@
               <div>
                 <label>CUSTOM CONTRIBUTING NOTES (optional — default guide
                   auto-generated)</label>
-                <textarea id="contribNotes" style="min-height: 70px" oninput="scheduleRender()"
+                <textarea class="textInput" id="contribNotes" style="min-height: 70px" oninput="scheduleRender()"
                   placeholder="Any specific guidelines, code style rules, branch naming conventions..."></textarea>
+                <label><span class="wordCount">0</span> <span class="wordCountText">Words</span></label>
               </div>
             </div>
           </div>
@@ -460,6 +459,45 @@
             </button>
           </div>
         </div>
+        <!-- ── QUALITY SCORE PANEL ── -->
+        <div class="quality-panel" id="qualityPanel" style="display:none">
+          <div class="quality-panel-header" id="qualityPanelToggle" onclick="toggleQualityPanel()">
+            <div class="quality-panel-left">
+              <span class="quality-panel-icon">📊</span>
+              <span class="quality-panel-title">README Quality Score</span>
+              <span class="quality-score-badge" id="qualityScoreBadge">0</span>
+            </div>
+            <div class="quality-panel-right">
+              <span class="quality-label" id="qualityLabel">—</span>
+              <svg class="quality-chevron" id="qualityChevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="transform: rotate(-90deg)">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </div>
+          </div>
+          <div class="quality-panel-body" id="qualityPanelBody" style="display:none">
+            <div class="quality-score-row">
+              <div class="quality-ring-wrap">
+                <svg class="quality-ring" viewBox="0 0 36 36">
+                  <circle class="quality-ring-bg" cx="18" cy="18" r="15.9" />
+                  <circle class="quality-ring-fill" id="qualityRingFill" cx="18" cy="18" r="15.9"
+                    stroke-dasharray="0 100" />
+                </svg>
+                <span class="quality-ring-num" id="qualityRingNum">0</span>
+              </div>
+              <div class="quality-score-details">
+                <div class="quality-score-main" id="qualityScoreMain">0 / 100</div>
+                <div class="quality-score-sub" id="qualityScoreSub">Fill in sections to improve your score</div>
+                <div class="quality-bar-wrap">
+                  <div class="quality-bar-track">
+                    <div class="quality-bar-fill" id="qualityBarFill" style="width:0%"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="quality-suggestions" id="qualitySuggestions"></div>
+          </div>
+        </div>
+
         <div class="preview-body" id="previewBody">
           <div class="empty-preview">
             <div class="icon">📄</div>
