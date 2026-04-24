@@ -1024,7 +1024,7 @@ select option {
 }
 
 .pbtn {
-  padding: 8px 14px;
+  padding: 8px 10px;
   border-radius: 8px;
   font-size: 12px;
   font-weight: 600;
@@ -1055,6 +1055,18 @@ select option {
 .pbtn.green:hover {
   background: rgba(16, 185, 129, 0.2);
   color: #10b981;
+}
+
+.pbtn.print {
+  background: rgba(129, 140, 248, 0.08);
+  border-color: rgba(129, 140, 248, 0.3);
+  color: var(--accent2);
+}
+
+.pbtn.print:hover {
+  background: rgba(129, 140, 248, 0.18);
+  color: var(--accent2);
+  border-color: var(--accent2);
 }
 
 .preview-body {
